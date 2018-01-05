@@ -1,6 +1,6 @@
 #include <stdio.h>
 long long int a[1000007], len;
-long long int temp;
+long long int temp, fl=0;
 
 void swap(long long int c, long long int b) {
 	temp = a[b];
@@ -9,37 +9,68 @@ void swap(long long int c, long long int b) {
 }
 
 void sort(long long int lef, long long int rig) {
-	if(rig - lef == 1) {
+	long long int l, r, i;
+	if(rig - lef <= 1) {
 		return; // if the length of the array is 1, it has been sorted
 	}
 	l = lef; // backups
 	r = rig;
 	long long int pivot;
 	pivot = (l + r)/2;
+	
+	printf("Before loop:\nl: [%lld]=%lld r: [%lld]=%lld pivot: [%lld]=%lld\n", l, a[l], r, a[r], pivot, a[pivot]);
+	fl = 0;
 
 	while(r > l) { // swapperooo
+		for (i = 0; i < len; ++i)
+		{
+			printf("%lld ", a[i]);
+		}
+
+		printf("\n");
+		printf("In loop:\nl: [%lld]=%lld r: [%lld]=%lld pivot: [%lld]=%lld\n", l, a[l], r, a[r], pivot, a[pivot]);
+		
 		while(a[l] <= a[pivot]) { // keeping everything left
+			fl = 1;
 			l++;
+		
+			printf("left <= pivot. l++\n");
+			printf("l: [%lld]=%lld r: [%lld]=%lld pivot: [%lld]=%lld\n", l, a[l], r, a[r], pivot, a[pivot]);
+		
 			if(l == len) { // edge
+				printf("Edge\n");
 				swap(len-1, pivot);
 				break;
 			}
 		}
 		while(a[r] > a[pivot]) { // keeping everything right
 			r--;
+			fl = 1;
+			printf("right > pivot. r--\n");
+			printf("l: [%lld]=%lld r: [%lld]=%lld pivot: [%lld]=%lld\n", l, a[l], r, a[r], pivot, a[pivot]);
+		
 			if(r == -1) { // edge
+				printf("Edge\n");
 				swap(0, pivot);
 				break;
 			}
 		}
 		if(r <= l) {
+			printf("r<=l, swapping\n");
 			swap(l, r); //huh please work
 		}
-		swap(l, pivot);//please
+		if(fl == 1) {
+			printf("swapping l, pivot\n");
+			swap(l, pivot);//please
+			temp = l;
+		}
+		if(fl == 0) {
+			break;
+		}
 	}
 
-	sort(lef, pivot-1); // recursion
-	sort(pivot+1, rig);
+	sort(lef, temp-1); // recursion
+	sort(temp+1, rig);
 
 	return;
 }
@@ -73,13 +104,19 @@ sort: lef, rig
 
 */
 	long long int l, i, r;
+	printf("Enter length of array\n");
 	scanf("%lld", &len);
+	printf("Enter array\n");
 	for(i = 0; i < len; i++) {
 		scanf("%lld", &a[i]);
 	}	
 	l = 0;
 	r = len - 1;
 	sort(l, r);
+	for (i = 0; i < len; ++i)
+	{
+		printf("%lld\n", a[i]);
+	}
 }
 
 /*
