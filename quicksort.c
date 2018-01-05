@@ -1,41 +1,85 @@
 #include <stdio.h>
+long long int a[1000007], len;
+long long int temp;
+
+void swap(long long int c, long long int b) {
+	temp = a[b];
+	a[b] = a[c];
+	a[c] = temp;
+}
+
+void sort(long long int lef, long long int rig) {
+	if(rig - lef == 1) {
+		return; // if the length of the array is 1, it has been sorted
+	}
+	l = lef; // backups
+	r = rig;
+	long long int pivot;
+	pivot = (l + r)/2;
+
+	while(r > l) { // swapperooo
+		while(a[l] <= a[pivot]) { // keeping everything left
+			l++;
+			if(l == len) { // edge
+				swap(len-1, pivot);
+				break;
+			}
+		}
+		while(a[r] > a[pivot]) { // keeping everything right
+			r--;
+			if(r == -1) { // edge
+				swap(0, pivot);
+				break;
+			}
+		}
+		if(r <= l) {
+			swap(l, r); //huh please work
+		}
+		swap(l, pivot);//please
+	}
+
+	sort(lef, pivot-1); // recursion
+	sort(pivot+1, rig);
+
+	return;
+}
 
 int main() {
-	// var block
-	long long int lar_l = 1;
-	long long int smo_r = -1; // to change once length set
-	long long int len, i, j, pivot = 0, temp;
-	long long int ar[10007];
+/*
 
-	// input block
-	scanf("%lld", &len); // the length of the array
+sort: lef, rig
+	if(rig-lef == 1)
+		return;
+	l = lef + 1;
+	r = rig;
+	set pivot = (l+r)/2
+
+	split//while(r < l):
+		while(a[l] <= a[pivot]):
+			l++;
+			if(l == len):
+				swap to end
+				break off
+		while(a[r] >= a[pivot]):
+			r--;
+			if(r == -1):
+				swap to beginning
+				break off
+		if(r <= l):
+			swap(a[l], a[r]);
+		swap(a[l], a[pivot]);
+	sort(l, pivot-1);
+	sort(pivot+1, r);
+
+*/
+	long long int l, i, r;
+	scanf("%lld", &len);
 	for(i = 0; i < len; i++) {
-		scanf("%lld", &ar[i]); // each element of the array
-	}
-
-	// misc
-	smo_r = len - 1;
-
-	while(lar_l < smo_r) { // TODO insert condition later
-		if(ar[lar_l] < ar[pivot]) {
-			// fine
-			lar_l++;
-		}
-		if(ar[smo_r] > ar[pivot]) {
-			// fine
-			smo_r--;
-		}
-		
-	}
-	if(lar_l > smo_r) {
-		// swap
-		temp = ar[lar_l];
-		ar[lar_l] = ar[smo_r];
-		ar[smo_r] = temp;
-	}
-
-
-	return 0;
+		scanf("%lld", &a[i]);
+	}	
+	l = 0;
+	r = len - 1;
+	sort(l, r);
 }
 
 /*
@@ -74,8 +118,6 @@ pivot: a[5] = 8
 .
 .
 .
-
-
 
 
 
