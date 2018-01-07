@@ -79,13 +79,13 @@ int main() {
 /*
 
 sort: lef, rig
-	if(rig-lef == 1)
+	if(rig-lef <= 1)
 		return;
-	l = lef + 1;
+	l = lef;
 	r = rig;
 	set pivot = (l+r)/2
 
-	split//while(r < l):
+	split//while(l < r):
 		while(a[l] <= a[pivot]):
 			l++;
 			if(l == len):
@@ -98,9 +98,9 @@ sort: lef, rig
 				break off
 		if(r <= l):
 			swap(a[l], a[r]);
-		swap(a[l], a[pivot]);
-	sort(l, pivot-1);
-	sort(pivot+1, r);
+		if changes, swap(a[l], a[pivot]);
+	sort(lef, l-1);
+	sort(l+1, rig);
 
 */
 	long long int l, i, r;
