@@ -1,0 +1,3 @@
+match brackets of {<[()]>} etc
+1 for opening, enter stack
+2 for closing return char, check if returned value is same as opening value

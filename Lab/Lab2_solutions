@@ -1,0 +1,37 @@
+match brackets of {<[()]>} etc
+1 for opening, enter stack
+2 for closing return char, check if returned value is same as opening value
+
+---------------------------------------------------------------------------
+
+Print first person >= self in height, looking right
+
+            0
+0           \
+\   0   0   \
+\   \ 0 \   \
+\ 0 \ \ \   \
+\ \ \ \ \ 0 \
+
+0 1 2 3 4 5 6
+6 2 4 4 6 6
+
+- start at right
+- compare against next. if smaller, pop and repeat. If bigger, assign and push.
+- go left
+
+----------------------------------------------------------------------------
+
+    __
+    | |
+  __| |__
+  | | | |
+__| | | |
+| | | | |
+| | | | |
+|_|_|_|_|
+
+1. for each block, get max area (with HighestLookRight, both left and right)
+2. done
+
+-----------------------------------------------------------------------------

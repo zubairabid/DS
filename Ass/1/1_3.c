@@ -38,14 +38,160 @@
         Update: (11.01.2018) :  I increment the counter if something from the right half moves to the left half. Works
                                 for the test cases supplied in the question, but not for OJ (WA). Some bug which needs 
                                 to be fixed, it seems. 
-
-    
-
-
-
+        Update: (12:01:2018) :  Logic above is wrong. Fixed it, but still ain't working. Fuck it, starting a new one
 */
 
-long long int m_sort(long long int, long long int);
+/*USAGE: 
+    For use with long long int in C
+    The functions must be initilaised before main(). The rest may come after. 
+    Sorts by ascending order. 
+    Call m_sort(array_name, start_index_of_array, end_index_of_array)
+    Declare the array globally.
+*/
+
+long long int counter = 0;
+long long int a[1000000];
+long long int substatus[1000000];
+
+long long int lis(long long int l, long long int r) {
+    long long int i, j, k, n, max = 0, mloc = 0; 
+    for(i = l; i <= r; i++) { // iteration through the array
+        k = 0;
+        for(j = i-1; j >= l; j--) { // checks for LIS number
+            if(a[j] < a[i] && substatus[j] > k) {
+                k = substatus[j];
+            }
+        }
+        k++;
+        substatus[i] = k;
+        //printf("%lld ", k);
+        if(k >= max) {
+            max = k;
+            mloc = i;
+        }
+    }
+
+    for (i = 0; i < 1000000; ++i)
+    {
+        substatus[i] = 0;
+    }
+
+    return max;
+}
+
+void m_sort(long long int, long long int);
+void merge(long long int, long long int);
+
+/*
+    Called first for merge purposes
+    Recursively breaks the array into smaller arrays and passes them for merging
+*/
+void m_sort(long long int l, long long int r) {
+    if(l==r)
+        return;
+    m_sort(l, ((l+r)/2));
+
+    m_sort((((l+r)/2)+1), r);
+    merge(l, r);
+    return;
+}
+
+/*
+    Called by function m_sort
+    Merges the smaller arrays by comparing against each element in succession
+*/
+void merge(long long int l, long long int r) {
+
+    long long int lislen = lis(l, r);
+    counter += r - l + 1 - lislen;
+
+
+    long long int m = (l+r)/2 + 1;
+    long long int start = 0;
+    long long int b[r-l+1];
+    long long int i, j;
+    
+    long long int cl = l, cr = r, cm = m;
+    while(start <= r-l) {
+        if(((a[cl] <= a[cm])||(cm>r)) && (cl<m)) {
+            b[start++] = a[cl++];       }
+        else {
+            b[start++] = a[cm++];
+        }
+    }
+    for(i = l, j = 0; i <= r; i++, j++) {
+        a[i] = b[j];
+    }
+    return;
+}
+
+int main()
+{
+    long long int n, i, j;
+    scanf("%lld", &n); //  length of the array
+
+    for(i = 0; i < n; i++) { // input to array asked for
+        scanf("%lld", &a[i]);
+    }
+
+    m_sort(0, n-1);
+
+    printf("%lld\n", counter);
+    /*
+    for(i = 0; i < n; i++) { //prints the array
+        printf("%lld ", a[i]);
+    }
+    printf("\n");*/
+    
+    return 0;
+}    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------
+/*long long int m_sort(long long int, long long int);
 long long int merge(long long int, long long int);
 
 long long int a[1000009];
@@ -75,7 +221,7 @@ int main() {
 /*
 	Called first for merge purposes
 	Recursively breaks the array into smaller arrays and passes them for merging
-*/
+*//*
 long long int m_sort(long long int l, long long int r) {
     long long int counter = 0;
     if(l==r)
@@ -90,7 +236,7 @@ long long int m_sort(long long int l, long long int r) {
 /*
 	Called by function m_sort
 	Merges the smaller arrays by comparing against each element in succession
-*/
+*//*
 long long int merge(long long int l, long long int r) {
     long long int m = (l+r)/2 + 1;
     long long int start = 0;
@@ -106,7 +252,7 @@ long long int merge(long long int l, long long int r) {
         else {
             /*if(start < m-l) { // if right goes to left
                 counter++;
-            }*/
+            }*//*
             if(cl < m && temp != a[cl]) {
                 temp = cl;
                 counter++;
@@ -119,4 +265,6 @@ long long int merge(long long int l, long long int r) {
     }
     return counter;
 }
+
+*/
 

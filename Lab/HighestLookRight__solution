@@ -1,0 +1,15 @@
+Print first person >= self in height, looking right
+
+            0
+0           \
+\   0   0   \
+\   \ 0 \   \
+\ 0 \ \ \   \
+\ \ \ \ \ 0 \
+
+0 1 2 3 4 5 6
+6 2 4 4 6 6
+
+- start at right
+- compare against next. if smaller, pop and repeat. If bigger, assign and push.
+- go left
