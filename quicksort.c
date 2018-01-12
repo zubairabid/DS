@@ -1,5 +1,5 @@
 #include <stdio.h>
-long long int a[1000007], len;
+/*long long int a[1000007], len;
 long long int temp, fl=0;
 
 void swap(long long int c, long long int b) {
@@ -102,7 +102,7 @@ sort: lef, rig
 	sort(lef, l-1);
 	sort(l+1, rig);
 
-*/
+
 	long long int l, i, r;
 	printf("Enter length of array\n");
 	scanf("%lld", &len);
