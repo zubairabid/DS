@@ -4,11 +4,11 @@
 //#include <math.h>
 
 /*USAGE: 
-	For use with long long int in C
-	The functions must be initilaised before main(). The rest may come after. 
-	Sorts by ascending order. 
-	Call m_sort(array_name, start_index_of_array, end_index_of_array)
-	Declare the array globally.
+    For use with long long int in C
+    The functions must be initilaised before main(). The rest may come after. 
+    Sorts by ascending order. 
+    Call m_sort(array_name, start_index_of_array, end_index_of_array)
+    Declare the array globally.
 */
 
 /*Note:
@@ -59,7 +59,7 @@ long long int a_nlogn[1000000];
 long long int lis(long long int l, long long int r)
 {
     long long int i, j, k, n, max = 0, mloc = 0; 
-    long long int b_l = l, b_r, b_m, set;
+    long long int b_l = l, b_r = r, b_m, set;
     /*for(i = l; i <= r; i++) { // iteration through the array
         k = 1;
         for(j = i-1; j >= l; j--) { // checks for LIS number
@@ -75,61 +75,59 @@ long long int lis(long long int l, long long int r)
             mloc = i;
         }
     }*/
-    for (i = l; i <= r; ++i)
+    /*for (i = l; i <= r; ++i)
     {
         a_nlogn[i] = LLONG_MIN;
 
         //substatus[i] = 0;
-    }
-
+    }*/
 
     k = l;
     n = 0;
-    for(i = l; i <= r; i++) {
+    for(i = l; i <= r; i++)
+    {
         b_r = k;
-        if(a_nlogn[l]==LLONG_MIN) {
+        if(i==l)
+        {
             a_nlogn[l] = a[i];
             n = 1;
             continue;
         }
 
-        if(a[i] > a_nlogn[k]) {
+        if(a[i] > a_nlogn[k])
+        {
             a_nlogn[++k] = a[i];
             n++;
+            continue;
         }
-        else {
+
+        if(a[i] < a_nlogn[l])
+        {
+            a_nlogn[l] = a[i];
+            continue;
+        }
+
+        b_r = l+(n-1);
+        b_l=l;
+        b_m = (b_r-b_l)/2 + b_l;
+        //binary search
+        //printf("Entering the binary search loop\n");
+        while(b_r >= b_l)
+        {
             b_m = (b_r-b_l)/2 + b_l;
-            //binary search
-            while(b_r > b_l)
-            {
-                b_m = (b_r-b_l)/2 + b_l;
 
-                if(a_nlogn[b_m] > a[i])
-                {
-                    b_r = b_m - 1;
-                    set = b_m;
-                }
-                else if(a_nlogn[b_m] < a[i])
-                {
-                    b_l = b_m + 1;
-                    set = b_m + 1;
-                }
-                else
-                {
-                    break;//?
-                }
-
+            if((a_nlogn[b_m-1] < a[i]) && (a[i] < a_nlogn[b_m])) {
+                break;
             }
-            if(a[i] < a_nlogn[l])
-            {
-                a_nlogn[l] = a[i];
+            else if(a[i] > a_nlogn[b_m]) {
+                b_l=b_m+1;
             }
-            else if(a[i] < a_nlogn[set])
-            {
-                a_nlogn[set] = a[i];
+            else if(a[i] < a_nlogn[b_m-1]) {
+                b_r=b_m-1;
             }
-            //a_nlogn[b_m] = a[i];
         }
+        //printf("Left the binary search loop\n");
+        a_nlogn[b_m]=a[i];
     }
 /*
     for (i = l; i <= r; ++i)
@@ -296,8 +294,8 @@ int main() {
 
 
 /*
-	Called first for merge purposes
-	Recursively breaks the array into smaller arrays and passes them for merging
+    Called first for merge purposes
+    Recursively breaks the array into smaller arrays and passes them for merging
 *//*
 long long int m_sort(long long int l, long long int r) {
     long long int counter = 0;
@@ -311,15 +309,15 @@ long long int m_sort(long long int l, long long int r) {
 }
 
 /*
-	Called by function m_sort
-	Merges the smaller arrays by comparing against each element in succession
+    Called by function m_sort
+    Merges the smaller arrays by comparing against each element in succession
 *//*
 long long int merge(long long int l, long long int r) {
     long long int m = (l+r)/2 + 1;
     long long int start = 0;
     long long int b[r-l+1];
-	long long int i, j, counter = 0;
-	long long int temp = -832974329;
+    long long int i, j, counter = 0;
+    long long int temp = -832974329;
 
     long long int cl = l, cr = r, cm = m;
     while(start <= r-l) {

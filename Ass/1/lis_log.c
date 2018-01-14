@@ -7,6 +7,7 @@ long long int substatus[1000000];
 long long int a_nlogn[1000000];
 
 long long int lis(long long int l, long long int r) {
+    printf("ENteered this fucking shit\n");
     long long int i, j, k, n, max = 0, mloc = 0; 
     long long int b_l = l, b_r, b_m, set;
     /*for(i = l; i <= r; i++) { // iteration through the array
@@ -41,11 +42,18 @@ long long int lis(long long int l, long long int r) {
         }
 
         b_r = k;
+
         if(a[i] > a_nlogn[k]) {
             a_nlogn[++k] = a[i];
             n++;
         }
+        
+        else  if(a[i] < a_nlogn[l]) {
+                a_nlogn[l] = a[i];
+            }
         else {
+            b_l=l;
+            b_r=l+n-1;
             b_m = (b_r-b_l)/2 + b_l;
             //binary search
             while(b_r > b_l) {
@@ -62,18 +70,16 @@ long long int lis(long long int l, long long int r) {
                 else {
                     break;//?
                 }
-
             }
-            if(a[i] < a_nlogn[l]) {
-                a_nlogn[l] = a[i];
-            }
-            else if(a[i] < a_nlogn[set]) {
+            
+            if(a[i] < a_nlogn[set]) {
                 a_nlogn[set] = a[i];
             }
             //a_nlogn[b_m] = a[i];
+        }
 
             
-        }
+        
         printf("Array after checking a[%lld] = %lld :\n", i, a[i]);
         for(j = l; j <= k; j++) {
             printf("%lld ", a_nlogn[j]);
