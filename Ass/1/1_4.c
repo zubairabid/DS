@@ -180,27 +180,27 @@ long long int sch(long long int lb, long long int ub) {
     //    ans = ans + 1; // rounding up for a rounding bug
     //} 
 
-    printf("Searching within %lld to %lld at %lld\n", lb, ub, ans);
+    // printf("Searching within %lld to %lld at %lld\n", lb, ub, ans);
 
 
     while(j < n) {
         t = tme(i, j); // calculates and stores time
 
-        printf("Time taken for %lld to %lld in array is %lld\n", i, j, t);
+        // printf("Time taken for %lld to %lld in array is %lld\n", i, j, t);
 
         if(t < ans) { // Scope for adding more to the current box
 
-            printf("More addable\n");
+            // printf("More addable\n");
 
             j = j + 1;
             if(j == n) {
-                printf("We're at the end of the straw\n");
+                // printf("We're at the end of the straw\n");
                 c--; // box completed
             }
         }
         else if(t > ans) { // box is /overflowing
 
-            printf("t was greater than ans. New box being created\n");
+            // printf("t was greater than ans. New box being created\n");
 
             c--;
             if(i == j) { // inaccessible? edge case
@@ -211,7 +211,7 @@ long long int sch(long long int lb, long long int ub) {
             continue; // we do not want to consider the answer for t
         }
         else { // box just fit
-            printf("t fit in ans. New box being created\n");
+            // printf("t fit in ans. New box being created\n");
 
             c--;
             i = j+ 1;
@@ -223,24 +223,24 @@ long long int sch(long long int lb, long long int ub) {
         }
 
     }
-    printf("-----------\nmax = %lld\nans = %lld\nc = %lld\n", max, ans, c);
+    // printf("-----------\nmax = %lld\nans = %lld\nc = %lld\n", max, ans, c);
 
     if(c < 0) { // too small a boundary
-        printf("c < 0. Boundary is too small. Increasing lb to ans\n");
+        // printf("c < 0. Boundary is too small. Increasing lb to ans\n");
         if(ub-lb == 1) {
             return ub; // haxxx
         }
         return sch(ans, ub);
     }
     if(ans-max > 0) { // too big a boundary
-        printf("ans-max > 0. Boundary is too big. Decreasing ub to ans\n"); 
+        // printf("ans-max > 0. Boundary is too big. Decreasing ub to ans\n"); 
         if(ub-lb == 1) {
             return lb; // haxxx
         }
         return sch(lb, ans);
     }
     if(ans - max == 0 && c == 0) { // perfect
-        printf("Got the answer:\n");
+        // printf("Got the answer:\n");
         return ans;
     }
 
@@ -261,7 +261,7 @@ int main() {
     } 
 
     m_sort(0, n-1); // sort in reverse order
-    printr(0, n-1); //sort works fine
+    // printr(0, n-1); //sort works fine
 
     ans = sch(tme(0, 0), tme(0, n-1)); // passes to the search function the lower and upper time bound limits.
     printf("%lld\n", ans);
