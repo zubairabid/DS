@@ -51,7 +51,7 @@ void cl(long long int cn, long long int ck) {
 			}
 		}
 	//	printf("Printing\n");
-		for(i = point, c = 1; c<=cn; i++) {
+		for(0i = point, c = 1; c<=cn; i++) {
 			if(a[i%n] == 0) {
 				continue;
 			}

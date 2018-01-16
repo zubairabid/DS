@@ -59,9 +59,9 @@ int main()
 					pop();
 					dat2 = head->data;
 					pop();
-					result = dat2 - dat1;
-					// printf("Subtracting %lld and %lld to push %lld to stack\n", dat1, dat2, result);
-					push(result%flow);
+					result = (dat2%flow - dat1%flow + flow)%flow;
+					// printf("Subtracting %lld and %lld to push %lld to stack\n", dat2, dat1, result);
+					push(result);
 				}
 				if(x == '*')
 				{
@@ -82,7 +82,7 @@ int main()
 					dat2 = head->data;
 					pop();
 					result = dat2 / dat1;
-					//printf("Dividing %lld and %lld to push %lld to stack\n", dat1, dat2, result);
+					//printf("Dividing %lld and %lld to push %lld to stack\n", dat2, dat1, result);
 					push(result%flow);
 				}
 				
