@@ -3,21 +3,21 @@
 #include <string.h>
 
 long long int flow = 1000000007;
-char str[200007];
-long long int stack[10000007];
-long long int head = -1;
-// struct Node {
-// 	long long int data;
-// 	struct Node* next;
-// };
+char str[2000007];
+//long long int stack[10000007];
+// long long int head = -1;
+struct Node {
+	long long int data;
+	struct Node* next;
+};
 
-// struct Node* head = NULL;
+struct Node* head = NULL;
 void push(long long int);
 void pop();
 
 int main()
 {
-	//struct Node* head = NULL;
+	// struct Node* head = NULL;
 	long long int temp, T, i, j;
 	long long int dat1, dat2, result;
 	char x;
@@ -28,8 +28,9 @@ int main()
 	{
 		scanf("%s", str);
 		//printf("%s\n", str);
+		long long int len = strlen(str);
 
-		for (j = 0; j < strlen(str); ++j)
+		for (j = 0; j < len; ++j)
 		{
 			x = str[j];
 			// printf("Character: %c\n", x);
@@ -43,9 +44,9 @@ int main()
 				if(x == '+')
 				{
 					// printf("Operand found: +\n");
-					dat1 = stack[head];
+					dat1 = head->data;
 					pop();
-					dat2 = stack[head];
+					dat2 = head->data;
 					pop();
 					result = dat1 + dat2;
 					// printf("Adding %lld and %lld to push %lld to stack\n", dat1, dat2, result);
@@ -54,9 +55,9 @@ int main()
 				if(x == '-')
 				{
 					// printf("Operand found: -\n");
-					dat1 = stack[head];
+					dat1 = head->data;
 					pop();
-					dat2 = stack[head];
+					dat2 = head->data;
 					pop();
 					result = dat2 - dat1;
 					// printf("Subtracting %lld and %lld to push %lld to stack\n", dat1, dat2, result);
@@ -65,9 +66,9 @@ int main()
 				if(x == '*')
 				{
 					// printf("Operand found: *\n");
-					dat1 = stack[head];
+					dat1 = head->data;
 					pop();
-					dat2 = stack[head];
+					dat2 = head->data;
 					pop();
 					result = dat1 * dat2;
 					// printf("Multiplying %lld and %lld to push %lld to stack\n", dat1, dat2, result);
@@ -76,9 +77,9 @@ int main()
 				if(x == '/')
 				{
 					//printf("Operand found: /\n");
-					dat1 = stack[head];
+					dat1 = head->data;
 					pop();
-					dat2 = stack[head];
+					dat2 = head->data;
 					pop();
 					result = dat2 / dat1;
 					//printf("Dividing %lld and %lld to push %lld to stack\n", dat1, dat2, result);
@@ -88,8 +89,7 @@ int main()
 			}
 		}
 
-		printf("%lld\n", stack[head]);
-		pop();
+		printf("%lld\n", head->data);
 	}
 	/*
 	for (int i = 0; i < 100; ++i)
@@ -127,15 +127,15 @@ int main()
 
 
 void push(long long int dat) {
-	// struct Node* node = NULL;
-	// node = (struct Node*)malloc(sizeof(struct Node));
-	if(head != 10000006) {
-		head++;
-	}
-	stack[head] = dat;
-	
+	struct Node* node = NULL;
+	node = (struct Node*)malloc(sizeof(struct Node));
+	node->data = dat;
+	node->next = head;
+	head = node;
 }
 
 void pop() {
-	head--;
+	struct Node* temp = head;
+	head = head->next;
+	free(temp);
 }
