@@ -12,7 +12,7 @@ void push(long long int type, long long int val) {
 		p1++;
 		s1[p1] = val;
 	}
-	if(type == p2) {
+	if(type == 2) {
 		p2++;
 		s2[p2] = val;
 	}
@@ -48,25 +48,45 @@ int main() {
 			continue;
 		}
 		else {
-			if(exist[i] == 1) {
+			if(exist[i] == 1 && p1 >= 0) {
+				// printf("Looking in stack 1. Head at %lld\n", p1);
+
 				temp = pop(1);
+
+				// printf("Value: %lld, looking for %lld\n", temp, i);
+
 				if(temp == i) {
+					// printf("Pop 1\n");
 					c++; // sorted
 				}
 				else {
+					// printf("Move 1 2\n");
 					push(2, temp);
+					i--;
 					moves++;
+					exist[temp] = 2;
 				}
 			}
-			else if(exist[i] == 2) {
+			else if(exist[i] == 2 && p2 >= 0) {
+				// printf("Looking in stack 2. Head at %lld\n", p2);
 				temp = pop(2);
+
+				// printf("Value: %lld, looking for %lld\n", temp, i);
+
 				if(temp == i) {
+					// printf("Pop 2\n");
 					c++; // sorted
 				}
 				else {
+					// printf("Move 2 1\n");
 					push(1, temp);
+					i--;
 					moves++;
+					exist[temp] = 1;
 				}
+			}
+			else {
+				// printf("Failed both tests somehow. exist[%lld] = %lld, p1 = %lld, p2 = %lld\n",i, exist[i], p1, p2);
 			}
 		}
 	}
