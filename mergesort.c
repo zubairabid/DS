@@ -9,21 +9,26 @@
 	Call m_sort(array_name, start_index_of_array, end_index_of_array)
 	Declare the array globally.
 */
+long long int a[10000007];
 
-void m_sort(long long int*,long long int, long long int);
-void merge(long long int*, long long int, long long int);
+void m_sort(long long int, long long int);
+void merge(long long int, long long int);
+
+int main() {
+    return 0;
+}
 
 /*
 	Called first for merge purposes
 	Recursively breaks the array into smaller arrays and passes them for merging
 */
-void m_sort(long long int* a, long long int l, long long int r) {
+void m_sort(long long int l, long long int r) {
     if(l==r)
         return;
-    m_sort(a, l, ((l+r)/2));
+    m_sort(l, ((l+r)/2));
 
-    m_sort(a, (((l+r)/2)+1), r);
-    merge(a, l, r);
+    m_sort((((l+r)/2)+1), r);
+    merge(l, r);
     return;
 }
 
@@ -31,7 +36,7 @@ void m_sort(long long int* a, long long int l, long long int r) {
 	Called by function m_sort
 	Merges the smaller arrays by comparing against each element in succession
 */
-void merge(long long int* a, long long int l, long long int r) {
+void merge(long long int l, long long int r) {
     long long int m = (l+r)/2 + 1;
     long long int start = 0;
     long long int b[r-l+1];
