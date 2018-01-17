@@ -20,7 +20,7 @@ long long int merge(long long int, long long int);
 
 int main() {
     long long int i, j, k, n, T = 0;
-    long long int lb = 0, ub = 1000000000000, tim, ans;
+    long long int lb = 0, ub = 1e12, tim, ans;
 
     scanf("%lld %lld", &n, &k);
     for (i = 0; i < n; ++i) {
@@ -91,7 +91,7 @@ int main() {
 
         while(lb < ub) {
             invers = 0;
-            tim = (lb+ub)/2;
+            tim = ub + (lb - ub)/2;
 
             for (i = 0; i < n; ++i)
             {
@@ -99,17 +99,22 @@ int main() {
                 // printf("%lld ", a[i]);
             }
             m_sort(0, n-1);
+            // printf("lb = %lld; ub = %lld, midval = %lld; inversions = %lld\n", lb, ub, tim, invers);
             // printf("Number of inversions: %lld\n", invers);
             if(invers < k) {
-                lb = tim + 1;
+                lb = tim;
             }
             else {
-                
-                ub = tim;
+                ans = tim;
+                ub = tim-1;
             }
         }
-
-        printf("%lld\n", lb);
+        if(tim == 1e12) {
+            printf("-1\n");
+        }
+        else {
+            printf("%lld\n", ans);   
+        }
     }
     
 
