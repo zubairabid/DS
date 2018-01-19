@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-long long int flow = 1000000007;
+long long int flow = 1e9+7;
 char str[2000007];
 //long long int stack[10000007];
 // long long int head = -1;
@@ -14,6 +14,38 @@ struct Node {
 struct Node* head = NULL;
 void push(long long int);
 void pop();
+
+long long int pwo(long long int base, long long int pow, long long int flow) {
+	long long int res = 1;
+	
+	while(pow > 0) {
+	
+		if(pow % 2 == 1) {
+			pow--;
+			res = (res * base)%flow;
+		}
+	
+		pow /= 2;
+		base = (base * base)%flow;
+	
+	}
+
+	return res;
+}
+
+long long int minv(long long int a) {
+
+	if(a != flow) {
+		return (pwo(a, flow-2, flow))%flow;	
+	}
+	else {
+		return -1;
+	}
+	
+	return 0;
+}
+
+
 
 int main()
 {
@@ -48,7 +80,7 @@ int main()
 					pop();
 					dat2 = head->data;
 					pop();
-					result = dat1 + dat2;
+					result = dat1%flow + dat2%flow;
 					// printf("Adding %lld and %lld to push %lld to stack\n", dat1, dat2, result);
 					push(result%flow);
 				}
@@ -70,7 +102,7 @@ int main()
 					pop();
 					dat2 = head->data;
 					pop();
-					result = dat1 * dat2;
+					result = (dat1%flow) * (dat2%flow);
 					// printf("Multiplying %lld and %lld to push %lld to stack\n", dat1, dat2, result);
 					push(result%flow);
 				}
@@ -81,7 +113,8 @@ int main()
 					pop();
 					dat2 = head->data;
 					pop();
-					result = dat2 / dat1;
+					dat2 = dat2 % flow;
+					result = (dat2*minv(dat1))%flow;
 					//printf("Dividing %lld and %lld to push %lld to stack\n", dat2, dat1, result);
 					push(result%flow);
 				}
