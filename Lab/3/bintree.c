@@ -85,6 +85,10 @@ Llint search(Node* head, Llint key) {
 	}
 }
 
+Llint dfs(Node* head, Llint key) {
+	
+}
+
 int main() {
 	Node* bl = join_trees(NULL, NULL, 50);
 	Llint datar;
