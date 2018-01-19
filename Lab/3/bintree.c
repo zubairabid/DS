@@ -67,6 +67,24 @@ void in_print(Node* head) {
 	return;
 }
 
+Llint search(Node* head, Llint key) {
+	if(head->v == key) {
+		return 1;
+	}
+	else if(key < head->v) {
+		if(head->left != NULL)
+			return search(head->left, key);
+		else
+			return 0;
+	}
+	else if(key > head->v) {
+		if(head->right != NULL)
+			return search(head->right, key);
+		else
+			return 0;
+	}
+}
+
 int main() {
 	Node* bl = join_trees(NULL, NULL, 50);
 	Llint datar;
@@ -75,8 +93,11 @@ int main() {
 		scanf("%lld", &datar);
 		bl = insert_Node(bl, datar);
 		in_print(bl);
-		printf("\n");
+		printf("\nSearch for : ");
+		scanf("%lld", &datar);
+		printf("%lld\n", search(bl, datar));
 	}
+
 	return 0;
 }
 
