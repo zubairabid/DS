@@ -248,11 +248,13 @@ int main() {
 	//Populating initial k window. All iterations combine to form the window 
 	for (i = 0; i < k; ++i) {
 		// Any elements in *smaller greater than element[i] is never gonna be smallest in the window
-		if((smaller->count != 0) && arr[(smaller->rear->data)] >= arr[i]) {// TODO TODO TODO
+		while((smaller->count != 0) && arr[(smaller->rear->data)] >= arr[i]) {// TODO TODO TODO
+			// printf("arr[%lld]=%lld >= arr[%lld]=%lld, popping rear\n", smaller->rear->data, arr[smaller->rear->data], i, arr[i]);
 			smaller = popr(smaller);
 		}
 		// Any elements in *greater smaller than element[i] is never gonna be greatest in the window
-		if((greater->count != 0) && arr[(greater->rear->data)] <= arr[i]) {// TODO TODO TODO
+		while((greater->count != 0) && arr[(greater->rear->data)] <= arr[i]) {// TODO TODO TODO
+			// printf("arr[%lld]=%lld <= arr[%lld]=%lld, popping rear\n", greater->rear->data, arr[greater->rear->data], i, arr[i]);
 			greater = popr(greater);
 		}
 
@@ -261,12 +263,13 @@ int main() {
 		smaller = pushr(smaller, i);
 	}
 
-	printf("in initial window: max = arr[%lld] = %lld, min = arr[%lld] = %lld\n", greater->front->data, arr[greater->front->data], smaller->front->data, arr[smaller->front->data]);
+	// printf("in initial window: max = arr[%lld] = %lld, min = arr[%lld] = %lld\n", greater->front->data, arr[greater->front->data], smaller->front->data, arr[smaller->front->data]);
 
 
 	// Multiply the max and min of the first window
 	max_ = modmultiply(max_, arr[greater->front->data]);
 	min_ = modmultiply(min_, arr[smaller->front->data]);
+	// printf("max: %lld, min = %lld\n\n", max_, min_);
 
 
 	// Populate remaining windows 1 by 1. Each iteration covers a new window
@@ -281,13 +284,13 @@ int main() {
 
 		// Any elements in *smaller greater than element[i] is never gonna be smallest in the window
 		while(smaller->count != 0 && arr[smaller->rear->data] >= arr[i]) {
-			printf("arr[%lld]=%lld >= arr[%lld]=%lld, popping rear\n", smaller->rear->data, arr[smaller->rear->data], i, arr[i]);
+			// printf("arr[%lld]=%lld >= arr[%lld]=%lld, popping rear\n", smaller->rear->data, arr[smaller->rear->data], i, arr[i]);
 			smaller = popr(smaller);
 		}
 
 		// Any elements in *greater smaller than element[i] is never gonna be greatest in the window
 		while(greater->count != 0 && arr[greater->rear->data] <= arr[i]) {
-			printf("arr[%lld]=%lld <= arr[%lld]=%lld, popping rear\n", greater->rear->data, arr[greater->rear->data], i, arr[i]);
+			// printf("arr[%lld]=%lld <= arr[%lld]=%lld, popping rear\n", greater->rear->data, arr[greater->rear->data], i, arr[i]);
 			greater = popr(greater);
 		}
  
@@ -296,13 +299,13 @@ int main() {
 		greater = pushr(greater, i);
 		smaller = pushr(smaller, i);
 
-		printf("in window: max = arr[%lld] = %lld, min = arr[%lld] = %lld\n", greater->front->data, arr[greater->front->data], smaller->front->data, arr[smaller->front->data]);
+		// printf("in window: max = arr[%lld] = %lld, min = arr[%lld] = %lld\n", greater->front->data, arr[greater->front->data], smaller->front->data, arr[smaller->front->data]);
 
 		// Multiply the max and min of the current window
 		max_ = modmultiply(max_, arr[greater->front->data]);
 		min_ = modmultiply(min_, arr[smaller->front->data]);
 
-		printf("max: %lld, min = %lld\n\n", max_, min_);
+		// printf("max: %lld, min = %lld\n\n", max_, min_);
 
 
 	}
