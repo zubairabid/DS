@@ -88,7 +88,7 @@ Llint search(Node* head, Llint key) {
 }
 
 Node * succ(Node* head) {
-
+	
 }
 
 Llint dfs(Node* head, Llint key) {
