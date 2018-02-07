@@ -98,13 +98,35 @@ Node * delete(Node* root, Llint val) { // the head has to be the overall tree he
 
 	}
 	else if (root->v == val) {
-
+		if (root->right == NULL && root->left == NULL) {
+			// remove root.
+			// respective child node of parent is now NULL
+			// free space
+		}
+		else if (root->right == NULL && root->left != NULL) {
+			// single left subtree exists
+			// left subtree parent is now root parent
+			// respective child of parent is now left subtree
+			// free space
+		}
+		else if (root->right != NULL && root->left == NULL) {
+			// single right subtree exists
+			// right subtree parent is now root parent
+			// respective child of parent is now right subtree
+			// free space
+		}
+		else { // full fledged subtree exists
+			// root value is now successor
+			// call delete on the right subtree for the successor value
+			//  
+		}
+		// return root
 	}
 	else if (root->v > val) {
-
+		// call left subtree
 	}
 	else if (root->v < val) {
-
+		// call right subtree
 	}
 }
 
