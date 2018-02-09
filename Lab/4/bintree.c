@@ -122,23 +122,57 @@ Node * successor(Node * base) {
 // TODO TODO TODO TODO TODO TODO
 // TODO TODO TODO TODO TODO TODO
 // TODO TODO TODO TODO TODO TODO
+// THe root passed to the function is the tree head.
 Node * delete(Node* root, Llint val) { // the head has to be the overall tree head !!!! RECONSIDER. Make it the parent
 	if(root == NULL) {
-
+		return NULL;
 	}
 	else if (root->v == val) {
 		if (root->right == NULL && root->left == NULL) {
+			Node * p = root->parent;
+			if(p->right->val == root->val) {
+				p->right = NULL;
+				free(root);
+				return NULL;
+			}
+			else {
+				p->left = NULL;
+				free(root);
+				return NULL;
+			}
 			// remove root.
 			// respective child node of parent is now NULL
 			// free space
 		}
 		else if (root->right == NULL && root->left != NULL) {
+			Node * p = root->parent;
+			if(p->right->val == root->val) {
+				p->right = root->left;
+			}
+			else {
+				p->left = root->left;
+			}
+			root->left->parent = p;
+			p = root->left;
+			free(root);
+			return p;
 			// single left subtree exists
 			// left subtree parent is now root parent
 			// respective child of parent is now left subtree
 			// free space
 		}
 		else if (root->right != NULL && root->left == NULL) {
+			Node * p = root->parent;
+			if(p->right->val == root->val) {
+				p->right = root->right;
+			}
+			else {
+				p->left = root->right;
+			}
+			root->right->parent = p;
+			p = root->right;
+			free(root);
+			return p;
 			// single right subtree exists
 			// right subtree parent is now root parent
 			// respective child of parent is now right subtree
@@ -148,15 +182,20 @@ Node * delete(Node* root, Llint val) { // the head has to be the overall tree he
 			// root value is now successor
 			// call delete on the right subtree for the successor value
 			//
+			root = successor(root->right);
+			return delete(root->right, root->v);
 		}
 		// return root
 	}
 	else if (root->v > val) {
 		// call left subtree
+		root->left = delete(root->left, val);
 	}
 	else if (root->v < val) {
 		// call right subtree
+		root->right = delete(root->right, val);
 	}
+	return root;
 }
 
 Llint dfs(Node* head, Llint key) {
