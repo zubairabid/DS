@@ -38,13 +38,13 @@ void printh() {
 int main() {
   /* code */
   Llint temp;
-  hp[1] = 10;
+  /*hp[1] = 10;
   hp[2] = 7;
   hp[3] = 6;
   hp[4] = 2;
   hp[5] = 5;
   ind = 5;
-  printh();
+  printh();*/
   for (Llint i = 1; i <= 10; i++) {
     scanf("%lld\n", &temp);
     heap_insert(temp);
