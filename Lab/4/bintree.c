@@ -107,7 +107,7 @@ Node * successor(Node * base) {
 	}
 	else { // we look up
 		Node * temp = base->parent;
-		while(temp->v < dat) { // <=?
+		while(temp!=NULL && temp->v < dat) { // <=?
 			base = temp;
 			temp = base->parent;
 		}
@@ -130,7 +130,7 @@ Node * delete(Node* root, Llint val) { // the head has to be the overall tree he
 	else if (root->v == val) {
 		if (root->right == NULL && root->left == NULL) {
 			Node * p = root->parent;
-			if(p->right->val == root->val) {
+			if(p->right->v == root->v) {
 				p->right = NULL;
 				free(root);
 				return NULL;
@@ -146,7 +146,7 @@ Node * delete(Node* root, Llint val) { // the head has to be the overall tree he
 		}
 		else if (root->right == NULL && root->left != NULL) {
 			Node * p = root->parent;
-			if(p->right->val == root->val) {
+			if(p->right->v == root->v) {
 				p->right = root->left;
 			}
 			else {
@@ -163,7 +163,7 @@ Node * delete(Node* root, Llint val) { // the head has to be the overall tree he
 		}
 		else if (root->right != NULL && root->left == NULL) {
 			Node * p = root->parent;
-			if(p->right->val == root->val) {
+			if(p->right->v == root->v) {
 				p->right = root->right;
 			}
 			else {
@@ -209,12 +209,21 @@ int main() {
 	{
 		scanf("%lld", &datar);
 		bl = insert_Node(bl, datar);
-		in_print(bl);
-		printf("\nDelete: : ");
+		//in_print(bl);
+		/*printf("\nDelete: : ");
 		scanf("%lld", &datar);
-		bl = delete(bl, datar);
-		// printf("%lld\n", delete(bl, datar));
+		bl = delete(bl, datar);*/
+
 		in_print(bl);
+		printf("\n");
+		for(Node* i = bl;i!=NULL;) {
+			Node * next = successor(i);
+			if(next != NULL)
+				printf("Successor is %lld\n", next->v);
+			i = next;
+		}
+
+		// printf("%lld\n", delete(bl, datar));
 	}
 
 	return 0;
