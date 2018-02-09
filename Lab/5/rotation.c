@@ -1,4 +1,15 @@
+#include <stdio.h>
+#include <stdlib.h>
 
+typedef long long int Llint;
+
+typedef struct N
+{
+	Llint v;
+	struct N* parent;
+	struct N* left;
+	struct N* right;
+} Node;
 
 Node* left_rotate(Node* x) {
   Node* y = x->right;
