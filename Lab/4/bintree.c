@@ -86,6 +86,35 @@ Llint search(Node* head, Llint key) {
 			return 0;
 	}
 }
+
+Node * tree_minimum(Node * base) {
+	Node * tmp = base->right;
+	if(base->right == NULL) {
+		return base;
+	}
+	else {
+		while(tmp->left != NULL) {
+			tmp = tmp->left;
+		}
+		return tmp;
+	}
+}
+
+Node * successor(Node * base) {
+	Llint dat = base->v;
+	if(base->right != NULL) { // We can look in the subtree
+		return tree_minimum(base->right);
+	}
+	else { // we look up
+		Node * temp = base->parent;
+		while(temp->v < dat) { // <=?
+			base = temp;
+			temp = base->parent;
+		}
+		return temp;
+	}
+}
+
 // TODO TODO TODO TODO TODO TODO
 // TODO TODO TODO TODO TODO TODO
 // TODO TODO TODO TODO TODO TODO
@@ -118,7 +147,7 @@ Node * delete(Node* root, Llint val) { // the head has to be the overall tree he
 		else { // full fledged subtree exists
 			// root value is now successor
 			// call delete on the right subtree for the successor value
-			//  
+			//
 		}
 		// return root
 	}
