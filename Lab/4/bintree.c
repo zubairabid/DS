@@ -103,7 +103,7 @@ Node * tree_minimum(Node * base) {
 Node * successor(Node * base) {
 	Llint dat = base->v;
 	if(base->right != NULL) { // We can look in the subtree
-		return tree_minimum(base->right);
+		return tree_minimum(base);
 	}
 	else { // we look up
 		Node * temp = base->parent;
@@ -128,8 +128,8 @@ Node * delete(Node* root, Llint val) { // the head has to be the overall tree he
 		return NULL;
 	}
 	else if (root->v == val) {
+		Node * p = root->parent;
 		if (root->right == NULL && root->left == NULL) {
-			Node * p = root->parent;
 			if(p->right->v == root->v) {
 				p->right = NULL;
 				free(root);
@@ -145,7 +145,7 @@ Node * delete(Node* root, Llint val) { // the head has to be the overall tree he
 			// free space
 		}
 		else if (root->right == NULL && root->left != NULL) {
-			Node * p = root->parent;
+			// Node * p = root->parent;
 			if(p->right->v == root->v) {
 				p->right = root->left;
 			}
@@ -162,7 +162,7 @@ Node * delete(Node* root, Llint val) { // the head has to be the overall tree he
 			// free space
 		}
 		else if (root->right != NULL && root->left == NULL) {
-			Node * p = root->parent;
+			// Node * p = root->parent;
 			if(p->right->v == root->v) {
 				p->right = root->right;
 			}
@@ -182,7 +182,7 @@ Node * delete(Node* root, Llint val) { // the head has to be the overall tree he
 			// root value is now successor
 			// call delete on the right subtree for the successor value
 			//
-			root = successor(root->right);
+			root->v = successor(root->right)->v;
 			return delete(root->right, root->v);
 		}
 		// return root
@@ -210,21 +210,191 @@ int main() {
 		scanf("%lld", &datar);
 		bl = insert_Node(bl, datar);
 		//in_print(bl);
-		/*printf("\nDelete: : ");
+		in_print(bl);
+		printf("\n");
+		printf("\nDelete: : ");
 		scanf("%lld", &datar);
-		bl = delete(bl, datar);*/
+		bl = delete(bl, datar);
 
 		in_print(bl);
 		printf("\n");
-		for(Node* i = bl;i!=NULL;) {
-			Node * next = successor(i);
-			if(next != NULL)
-				printf("Successor is %lld\n", next->v);
-			i = next;
-		}
+		// for(Node* i = bl;i!=NULL;) {
+		// 	Node * next = successor(i);
+		// 	if(next != NULL)
+		// 		printf("Successor of %lld is %lld\n", i->v, next->v);
+		// 	i = next;
+		// }
+
+		// printf("%lld\n", tree_minimum(bl)->v);
 
 		// printf("%lld\n", delete(bl, datar));
 	}
 
 	return 0;
 }
+//
+//
+// #include<stdio.h>
+// #include<stdlib.h>
+// typedef long long int ll;
+// struct Node
+// {
+// 	ll val;
+// 	struct Node* left;
+// 	struct Node* right;
+// 	struct Node* parent;
+// };
+// typedef struct Node node;
+// node* insert ( ll n , node *tree)
+// {
+// 	if(tree==NULL)
+// 	{
+// 		tree = (node *)malloc(sizeof(node));
+// 		tree->val=n;
+// 		tree->left=NULL;
+// 		tree->right=NULL;
+// 		tree->parent=NULL;
+//
+// 	}
+// 	else if(tree->val >= n)
+// 	{
+// 		if(tree->left == NULL)
+// 		{
+// 			tree->left= (node *)malloc(sizeof(node));
+// 			tree->left->val=n;
+// 			tree->left->left=NULL;
+// 			tree->left->right=NULL;
+// 			tree->left->parent=tree;
+// 		}
+// 		else
+// 		{
+// 			tree->left = insert(n,tree->left);
+// 		}
+// 	}
+// 	else
+// 	{
+// 		if(tree->right == NULL)
+// 		{
+// 			tree->right = (node *)malloc(sizeof(node));
+// 			tree->right->val = n;
+// 			tree->right->right=NULL;
+// 			tree->right->left=NULL;
+// 			tree->right->parent=tree;
+//
+// 		}
+// 		else
+// 		{
+// 			tree->right=insert(n,tree->right);
+// 		}
+// 	}
+// 	return tree;
+// }
+// void inorder(node* root)
+// {
+// 	if ( root == NULL) return;
+// 	inorder(root->left);
+// 	inorder(root->right);
+// 	printf("%lld ",root->val);
+//
+// }
+// node * search(ll n, node* tree)
+//
+// {
+// 	if(tree==NULL)
+// 		return NULL;
+// 	if(tree->val==n)
+// 		return tree;
+// 	else if (tree->val>n)
+// 		return search(n,tree->left);
+// 	else if (tree->val < n )
+// 		return search(n,tree->right);
+//
+// }
+// ll getminval(node* tree )
+// {
+// 	if(tree==NULL)
+// 		return -1;//NEVA HAPPN
+// 	while(tree->left != NULL)
+// 		tree=tree->left;
+// 	return tree->val;
+// }
+// node * delete(node * tree, ll n)
+// {
+// 	if(tree==NULL)
+// 		return NULL;
+// 	if(tree->val == n)
+// 	{
+// 		if (tree->left == NULL)
+// 		{
+// 			node* new_tree=tree->right;
+// 			free(tree);
+// 			return new_tree;
+// 		}
+// 		else if (tree->right == NULL)
+// 		{
+// 			node* new_tree=tree->left;
+// 			free(tree);
+// 			return new_tree;
+// 		}
+// 		else
+// 		{
+// 			//Find suc and replace and delete
+// 			ll suc_val = getminval(tree->right);
+// 			tree->val = suc_val ;
+// 			tree->right = delete(tree->right,suc_val);
+// 		}
+// 	}
+//
+// 	else if (tree-> val > n )
+// 	{
+// 		tree->left = delete(tree->left,n);
+// 	}
+// 	else
+// 	{
+// 		tree->right = delete(tree->right,n);
+// 	}
+// 	return tree;
+//
+//
+//
+// }
+// int main()
+// {
+// 	node* root;
+// 	int k;
+// 	ll n;
+// 	while(1)
+// 	{
+//
+// 		printf("\n1.Insert 2.Search 3.Delete 4.Quit 5.Print\n");
+// 		scanf("%d",&k);
+// 		if(k==1)
+// 		{
+// 			scanf("%lld",&n);
+// 			root=insert(n,root);
+// 		}
+// 		else if (k==2)
+// 		{
+// 			scanf("%lld",&n);
+// 			if(search(n,root)==NULL)
+// 				printf("false\n");
+//
+// 			else
+// 				printf("true\n");
+// 		}
+// 		else if (k==4)
+// 			break;
+// 		else if (k==3)
+// 		{
+// 			scanf("%lld",&n);
+// 			root=delete(root,n);
+// 		}
+// 		else if (k==4) {
+// 			break;
+// 		}
+// 		else
+// 			inorder(root);
+//
+// 	}
+// 	return 0;
+// }
