@@ -183,7 +183,7 @@ Node * delete(Node* root, Llint val) { // the head has to be the overall tree he
 			// call delete on the right subtree for the successor value
 			//
 			root->v = successor(root->right)->v;
-			return delete(root->right, root->v);
+			return delete(root->right,mroot->v);
 		}
 		// return root
 	}
