@@ -7,6 +7,7 @@ typedef long long int lint;
 
 typedef struct data {
   /* data */
+  lint arr;
   lint days;
   lint sadness;
 } girl;
@@ -116,7 +117,13 @@ void hdel(lint index) {
   //}
   //free(temp);
 }
-
+girl *go[1000099];
+int cmpfunc(const void* a,const void* b)
+{
+  girl* x = (girl *)a;
+  girl* y = (girl *)b;
+  return (x->arr - y->arr);
+}
 int main() {
   /* code */
   lint T, i, j, N, D, k, sad = 0, temp; // T <= 10, 1 <= N, D <= 1e5
@@ -128,32 +135,41 @@ int main() {
 
     std::cin >> N >> D; // test case i input
 
-    std::vector<girl *> din[D+1]; // vector array of all additions
+    //std::vector<girl *> din[D+1]; // vector array of all additions
+
 
     // reserve 10 for all din[] elements
 
     for(j = 0; j < N; j++) { // for test i
       girl * g = (girl *) malloc(sizeof(girl));
-      std::cin >> temp >> g->days >> g->sadness; // TODO ADD INPUT FOR DAY OF ENTRY
-      if(din[temp].size() == 0) {
-        din[temp].reserve(10);
-      }
-      din[temp].push_back(g);
+      std::cin >> g->arr >> g->days >> g->sadness; // TODO ADD INPUT FOR DAY OF ENTRY
+      go[j]=g;
       // std::cout << "Pushed girl with sadness=" << g->sadness << " days=" << g->days << " onto list for day " << temp << '\n';
       //hinsert(g);
       //print();
     }
-
+    lint ptr=0;
+    //qsort(go,N,sizeof(girl),cmpfunc);
     // iterate through each day
+    std::cout << "." << '\n';
+    for(long long int k=0;k<N;++k)
+      std::cout<<go[k]->sadness<<std::endl;
     for(j = 1; j <= D; j++) {
       // std::cout << "On day " << (j) << " we have\n";
 
-
+      /*
       for(k = 0; k < din[j].size(); k++) {
         girl * g = din[j][k];
         // std::cout << " sadness: " << g->sadness << " for " << g->days << " days\n";
         sad += g->sadness * g->days;
         hinsert(g);
+      }*/
+
+      while(ptr<N && (go[ptr]->arr)==j)
+      {
+        std::cout << "." << '\n';
+        hinsert(go[ptr]);
+        ++ptr;
       }
 
       if(ind == 0) {
