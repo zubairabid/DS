@@ -36,6 +36,22 @@ void heapify(lint index) { // heapifies the heap index up, by parent
 
 }
 
+void heapdown(lint index) {
+  lint temp;
+  if(hip[index] < hip[2*index] || hip[index] < hip[2*index+1]) {
+    if(hip[2*index] > hip[2*index+1]) {
+      temp = hip[index];
+      hip[index] = hip[2*index];
+      hip[2*index] = temp;
+    }
+    else {
+      temp = hip[index];
+      hip[index] = hip[2*index+1];
+      hip[2*index+1] = temp;
+    }
+  }
+}
+
 void hinsert(lint data) { // Assumes the rest of the heap is a heap proper
   hip[++ind] = data;
   heapify(ind);
@@ -47,9 +63,15 @@ void hdel(lint index) {
     std::cout << "Heap is empty" << std::endl;
     return;
   }
-
+  lint temp = hip[index];
   hip[index] = hip[ind];
   ind--; // fuck the last one in particular
 
-  heapify(index);
+  if(hip[index] < temp) {
+    heapdown(index);
+  }
+  else {
+    heapify(index);
+  }
+
 }

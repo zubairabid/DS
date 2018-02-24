@@ -37,6 +37,7 @@ void heapify(lint index) { // heapifies the heap index up, by parent
 }
 
 void heapdown(lint index) {
+  lint temp;
   if(hip[index] < hip[2*index] || hip[index] < hip[2*index+1]) {
     if(hip[2*index] > hip[2*index+1]) {
       temp = hip[index];
