@@ -36,21 +36,6 @@ void heapify(lint index) { // heapifies the heap index up, by parent
 
 }
 
-void heapdown(lint index) {
-  if(hip[index] < hip[2*index] || hip[index] < hip[2*index+1]) {
-    if(hip[2*index] > hip[2*index+1]) {
-      temp = hip[index];
-      hip[index] = hip[2*index];
-      hip[2*index] = temp;
-    }
-    else {
-      temp = hip[index];
-      hip[index] = hip[2*index+1];
-      hip[2*index+1] = temp;
-    }
-  }
-}
-
 void hinsert(lint data) { // Assumes the rest of the heap is a heap proper
   hip[++ind] = data;
   heapify(ind);
@@ -62,48 +47,9 @@ void hdel(lint index) {
     std::cout << "Heap is empty" << std::endl;
     return;
   }
-  lint temp = hip[index];
+
   hip[index] = hip[ind];
   ind--; // fuck the last one in particular
 
-  if(hip[index] < temp) {
-    heapdown(index);
-  }
-  else {
-    heapify(index);
-  }
-
-}
-
-int main() {
-  lint opt, temp;
-  while(true) {
-    std::cout<< "Hi. Enter 1 to Insert, 2 to delete, 3 to print." << std::endl;
-    std::cin >> opt;
-
-    switch (opt) {
-      case 1:
-        std::cout << "Enter value to insert" << '\n';
-        std::cin >> temp;
-
-        hinsert(temp);
-        print();
-        break;
-      case 2:
-        std::cout << "Enter node number to delete" << '\n';
-        std::cin >> temp;
-
-        hdel(temp);
-        print();
-        break;
-      case 3:
-        print();
-        break;
-      default:
-        std::cout << "Wrong input, try again" << std::endl;
-        break;
-    }
-  }
-
-  return 0;
+  heapify(index);
 }
