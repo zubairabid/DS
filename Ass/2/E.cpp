@@ -63,23 +63,24 @@ Crucial Bit: the DFS
 
 typedef long long int lint;
 
-struct Node {
+typedef struct node {
   /* data */
   lint x;
   lint y;
   lint r;
+  std::vector<int> adj_list;
 
-  Node() {
+  node() {
       x = 0;
       y = 0;
       r = 0;
   }
 
-};
+} Node;
 
 class Tree {
   Node v = new Node(x);
-  std::vector<Node> * adj[10005];
+  std::vector<Node> tree[1005];
 public:
   Tree(Node v);
 
