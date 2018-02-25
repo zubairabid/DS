@@ -156,7 +156,7 @@ void Tree::dfs_rec(lint vert, lint dest, lint visited[], lint rotation[]) {
   }
 
   visited[vert] = 0; // unmark
-  rotation[vert] = 0;
+  // rotation[vert] = 0;
 }
 
 void Tree::dfs(lint vert, lint dest) { // finds all paths from vert to dest by dfs
@@ -170,6 +170,16 @@ void Tree::dfs(lint vert, lint dest) { // finds all paths from vert to dest by d
   rotation[vert] = 1;
   std::cout << "Searching from " << vert << " to " << dest << '\n';
   dfs_rec(vert, dest, visited, rotation);
+
+  for(lint i = 0; i < size; i++) {
+    for(lint j = 0; j < adj_list[i].size(); j++) {
+      if(i != adj_list[i][j] && rotation[i] == rotation[adj_list[i][j]]) {
+        std::cout << "Rotation of " << i << " = Rotation of " << j << '\n';
+        rots = 2;
+        break;
+      }
+    }
+  }
 
   if(rots == 0) {
     // untouched
