@@ -44,10 +44,26 @@ Crucial Bit: the DFS
 #include <iostream>
 #include <vector>
 #include <string>
-#include <cmath>
+// #include <cmath>
 //#include <stdlib.h>
 
 typedef long long int lint;
+
+typedef struct node {
+  /* data */
+  lint x;
+  lint y;
+  lint r;
+  // std::vector<lint> adj_list;
+  lint rotation;
+  node() {
+      x = 0;
+      y = 0;
+      r = 0;
+      rotation = 0;
+  }
+
+} Node;
 
 /*
   Tree representation:
@@ -57,54 +73,32 @@ typedef long long int lint;
     an array of adjacency lists as a vector array, lints
      -the adjacency list array effectively acts as the tree. 1st node is 0, it's connected to list[0], etc
 */
-struct Node {
-  /* data */
-  int64_t x;
-  int64_t y;
-  int64_t r;
-  Node(int64_t x, int64_t y, int64_t r) x(x), y(y), r(r) { }
-};
 
-template <typename T>
-class Graph {
+class Tree {
+  static const int max_size = 1005;
 public:
-  void add_node(T& node) {
-    data.push_back(node);
-  }
-  void add_edge(int from, int to) {
-    //assert to < graph.size()
-    if(from >= graph.size())
-      graph.resize(graph.size() * 2);
-    //assert to < graph.size()
-    graph[from].push_back(to);
-  }
-
-  auto begin () const {
-    return data.begin();
-  }
-  auto end () const {
-    return data.end();
-  }
-
-  std::vector<T>::pointer_type* data() const {
-    return data.data();
-  }
-
+  Tree(lint size);
+  Node tree[max_size];
   void dfs(lint, lint);
   void adjify();
 private:
-  using basic_graph_t = std::vector<std::vector<int>>;
-
-  std::vector<T> data;
-  basic_graph_t graph;
+  //Node v = new Node();
+  lint size;
+  std::vector<lint> adj_list[max_size];
 
   lint rots; // stores the last rotation on search completion. Might collapse to just a lint.
   void dfs_rec(lint, lint, lint*, lint*);
-  void gcd(lint, lint)
+  void gcd(lint, lint);
+  bool center_distance(Node, Node);
 };
 
-double center_distance(Node a, Node b) {
-  return std::sqrt((a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y));
+Tree::Tree(lint size) {
+  this->size = size;
+  rots = 0;
+}
+
+bool Tree::center_distance(Node a, Node b) {
+  return ((a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y)) == (a.r + b.r)*(a.r + b.r);
 }
 
 void Tree::gcd(lint a, lint b) {
@@ -127,7 +121,7 @@ void Tree::gcd(lint a, lint b) {
 void Tree::dfs_rec(lint vert, lint dest, lint visited[], lint rotation[]) {
   visited[vert] = 1; // visited
   // rotation should be set in the previous one
-  lint i;
+  lint i, temp;
   if(vert == dest) {
     // do something
     // std::cout << "We reached the destination" << '\n';
@@ -139,27 +133,39 @@ void Tree::dfs_rec(lint vert, lint dest, lint visited[], lint rotation[]) {
       if(rots == rotation[vert]) {
         // good
         // std::cout << "Destination was valid" << '\n';
-      }
+      } // the else should be accounted for previously
       else {
         // no print
         rots = 2;
         // std::cout << "Destination was invalid" << '\n';
-        // find a way to end this properly
+        // find a way to end+ this properly
+        return;
       }
     }
-
+    // rots = rotation[vert]; // any exception should be accounted for previously now
   }
   else {
     for(i = 0; i < adj_list[vert].size(); i++) {
-      // std::cout << "Going through list of \t\t\t\t" << vert << '\n';
+      // std::cout << "\t\tGoing through list of " << vert << '\n';
       // std::cout << "[" << i << "] :";
       // for(lint j = 0; j < adj_list[vert].size(); j++) {
       //   std::cout << adj_list[vert][j] << ' ';
       // }
       // std::cout << '\n';
-      if(visited[adj_list[vert][i]] == 0) { // if it hasn't been visited
+      if(visited[adj_list[vert][i]] == 0) { // if it hasn't been visited in the current path
         // std::cout << "in list of " << vert << ", examining " << dest << '\n';
-        rotation[adj_list[vert][i]] = rotation[vert] == 1? -1 : 1;
+        temp = (rotation[vert] == 1? -1 : 1); // temp is the potential next rotation.
+
+        if(tree[adj_list[vert][i]].rotation != 0) { // if the vertex was ever approached before and it has a rotation set
+           if(temp != tree[adj_list[vert][i]].rotation) { // if the vertex has a different rotation from what we're trying to do
+            rots = 2;
+            return;
+          }
+        }
+        else {
+          rotation[adj_list[vert][i]] = temp; // setting the rotation of the next node
+          tree[adj_list[vert][i]].rotation = temp;
+        }
         dfs_rec(adj_list[vert][i], dest,  visited, rotation);
       }
     }
@@ -178,21 +184,26 @@ void Tree::dfs(lint vert, lint dest) { // finds all paths from vert to dest by d
     rotation[i] = 0;
   }
   rotation[vert] = 1;
+  tree[vert].rotation = 1;
   // std::cout << "Searching from " << vert << " to " << dest << '\n';
   dfs_rec(vert, dest, visited, rotation);
 
-  for(i = 0; i < size; i++) {
-    for(j = 0; j < adj_list[i].size(); j++) {
-      if(i != adj_list[i][j] && rotation[i] == rotation[adj_list[i][j]]) {
-        // std::cout << "Rotation of " << i << " = Rotation of " << j << '\n';
-        rots = 2;
-        i = size; // to break out of last
-        break;
-      }
-    }
-  }
+  // for(i = 0; i < size; i++) {
+  //   for(j = 0; j < adj_list[i].size(); j++) {
+  //     if(i != adj_list[i][j] && rotation[i] == rotation[adj_list[i][j]]) {
+  //       // std::cout << "Rotation of " << i << " = Rotation of " << j << '\n';
+  //       rots = 2;
+  //       i = size; // to break out of last
+  //       break;
+  //     }
+  //   }
+  // }
 
-  if(rots == 0) {
+  if(rots == 2) {
+    std::cout << "The input gear cannot move." << '\n';
+    return;
+  }
+  else if(rots == 0) {
     // untouched
     std::cout << "The input gear is not connected to the output gear." << '\n';
     return;
@@ -204,31 +215,49 @@ void Tree::dfs(lint vert, lint dest) { // finds all paths from vert to dest by d
     // std::cout << ((rots==1)?"":"-");
     gcd(tree[vert].r, tree[dest].r);
   }
-  else {
-    std::cout << "The input gear cannot move." << '\n';
-    return;
+
+}
+
+void Tree::adjify() {
+  lint i, j;
+  for(i = 0; i < size; i++) {
+    for(j = 0; j < size; j++) {
+      if(i!=j) {
+        if(center_distance(tree[i], tree[j])) {
+          // std::cout << "Center distance for " << j << " from " << i << " = " << center_distance(tree[i], tree[j]) << '\n';
+          adj_list[i].push_back(j);
+        }
+      }
+    }
+    // std::cout << "Created Adjacency list of tree[" << i << "] :";
+    // for(lint j = 0; j < adj_list[i].size(); j++) {
+    //   std::cout << adj_list[i][j] << ' ';
+    // }
+    // std::cout << '\n';
   }
 }
-bool is_distance_equal(int x1, int y1, int x2, int y2, int r1, int r2) {
-  return ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) == (r1 + r2) * (r1 + r2);
-}
+
+//
 int main() {
+  lint i, j, k, n, x, y, r;// n: number of gears,[2,1000]
+  // x, y:[-1e5,1e5]; r:[1,1e5]
   // input number of gears
-  int n;
   std::cin >> n;
   // create tree of n gears
-  Graph<Node> graph;
-  for (int i = 0; i < n; i++) {
+  Tree t(n);
+
+  for (i = 0; i < n; i++) {
+    /* code */
     std::cin >> x >> y >> r; // details for each gear
-    graph.add_node({.x = x, .y = y, .r = r});
+    Node v;
+    v.x = x;
+    v.y = y;
+    v.r = r; // please work, like in C_1
+    t.tree[i] = v; // constructing the tree
   }
 
-  auto
-  for(int i = 0; i < n; i++)
-      for(int j = 0; j < n; j++) {
-        if(is_distance_equal())
-      }
-  }
+  // adjacency the tree
+  t.adjify();
 
   t.dfs(0, n-1);
 
