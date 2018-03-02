@@ -25,8 +25,9 @@ queue<int> track;
 
 // distance from 0 to node destination
 int bfs(int destination) {
-  // printf("Entered BFS\n");
+
   int element, child;
+
   track.push(0);
   visited[0] = true;
   level[0] = 0;
@@ -34,17 +35,17 @@ int bfs(int destination) {
   int clevel = 0;
 
   while(!track.empty()) {
-    // printf("Queue is not empty\n");
+
     element = track.front();
-    // printf("Examining node %d\n", element);
+
     if(level[element] == clevel) { // if level up, level up
       clevel++;
     }
     visited[element] = true; // mark element in queue as visited
 
-    for(int j = 0; j < adj[element].size(); j++) { //child : adj[element]) { // go through children of element, marking levels if not already there
+    for(int j = 0; j < adj[element].size(); j++) {  // go through children of element, marking levels if not already there
       child = adj[element][j];
-      // printf("%d is a child of %d\n", child, element);
+
       if(!visited[child]) {
         track.push(child);
         level[child] = clevel;
@@ -55,10 +56,8 @@ int bfs(int destination) {
       }
 
     }
-    // printf("%d\n", track.pop());
-    // cout << track.pop() << " "; // pop and print element in queue
-    track.pop();
 
+    track.pop();
   }
 }
 
