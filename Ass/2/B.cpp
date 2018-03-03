@@ -138,7 +138,7 @@ RB Tree::dfs_rec(lint vertex, lint prev_weight, bool visited[]) {
   temp.r = r[vertex];
   temp.b = b[vertex];
 
-  // visited[vertex] = false;
+  visited[vertex] = false;
 
   return temp;
 }
