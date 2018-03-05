@@ -89,3 +89,27 @@ int main() {
 
   printf("%d\n", bfs(temp));
 }
+/*
+int bfs_proper() {
+  nbrs.push(0);
+  visited[0] = true;
+  level[0] = 0;
+  int clevel = 0;
+
+  while(!nbrs.empty()) {
+    element = nbrs.front();
+    if(level[element] == clevel) clevel++;
+    visited[element] = true;
+
+    for(int i = 0; i < adj[element].length(); i++) {
+      child = adj[element][i];
+
+      if(!visited[child]) {
+        nbrs.push(child);
+        level[child] = clevel;
+      }
+    }
+    nbrs.pop();
+  }
+}
+*/
