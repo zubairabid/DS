@@ -54,16 +54,20 @@ int main() {
   Trie* root = (Trie*)malloc(sizeof(Trie));
   init(root);
 
-  LL n;
+  string word;
+  LL n, wrong, i;
 
   cin >> n;
-  while(n > 0) {
-    string word;
+  for(i = 0; i < n; i++) {
     cin >> word;
 
     addWord(root, word);
-    n--;
   }
 
-  
+  cin >> wrong;
+  for(i = 0; i < wrong; i++) {
+    cin >> word;
+    
+  }
+
 }
