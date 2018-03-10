@@ -8,6 +8,9 @@ typedef long long LL;
 const LL MAX = 26;
 LL timer;
 
+string all[5000000];
+string fall[5000000];
+
 struct Trie {
   LL priority; // stores the max priority of all the possible words
   LL length; // stores the length of the word depicted by priority
@@ -36,13 +39,13 @@ void init(Trie* node, LL prty, LL len) {
 }
 
 // normal addition to dictionary trie, storing priority and length as well
-void addWord(Trie* root, string &word, LL prty, LL len) {
-  if(word.length() == 0) {
+void addWord(Trie* root, LL stindex, LL subindex, LL stlen, LL prty, LL len) {
+  if(stlen == 0) {
     root->word = true;
     // cout << "UPDATED WORD\nnode " << root << " : priority = " << root->priority << ". length = " << root->length << ". word = " << root->word << "\n";
     return;
   }
-  char fchar = word[0];
+  char fchar = fall[stindex][subindex];
   LL child = transform(fchar);
 
   // cout << "Adding " << fchar << " to " << root << ". edge[" << child << "] = " << root->edges[child] << "\n";
@@ -54,64 +57,49 @@ void addWord(Trie* root, string &word, LL prty, LL len) {
     // cout << "New ";
   }
   // cout << "node " << root->edges[child] << " : priority = " << root->edges[child]->priority << ". length = " << root->edges[child]->length << ". word = " << root->edges[child]->word << "\n";
-  string trump = word.substr(1);
-  addWord(root->edges[child], trump, prty, len);
+  addWord(root->edges[child], stindex, (subindex+1), (stlen-1), prty, len);
 }
 
-void searchWord(Trie * root, string &key, LL level, LL pc, bool step1) {
-  LL child = 0;
-  char fchar = 'a';
+void searchWord(Trie * root, LL stindex, LL subindex, LL stlen, LL level, LL pc, bool step1, LL len, LL prio) {
 
-  // cout << "key: " << key << ". level: " << level << ". pc: " << pc << ". node:" << root << "\n";
-
-  if(key.length() > 0) {
-    fchar = key[0];
-    child = transform(fchar);
-  }
-
-
-  if(key.length() == 0) { // in case the element is entirely within the system
+  if(level+1 == len) {
     timer += minimize(level - pc, 1 + root->length - level);
-    // cout << "Timer after key exhausts: " << timer << "\n";
-    return;
-  }
-  // cout << "root->word: " << root->word << "\n";
-  if(/*root->word*/(root->edges[child] == NULL) || ((root->edges[child]->priority) != (root->priority))) { // there will be a priority shift
-    timer += minimize(level - pc, 1 + root->length - level);
-    // cout << "Timer after priority shift: " << timer << "\n";
-    pc = level;
+    searchWord(root, stindex, (subindex+1), (stlen-1), level + 1, pc, false, len, prio);
   }
 
-  // cout << "fchar: " << fchar << ". child: " << child << ". edges[child]: " << root->edges[child] << "\n";
-  // cout << "root priority: " << root->priority << ". child (fchar) priority: " << ((root->edges[child] == NULL)?(-1):(root->edges[child]->priority)) << "\n";
-  if(root->edges[child] == NULL) { // if the edge does not exist
-    timer += key.length();
-    // cout << "Timer after mismatch: " << timer << "\n";
-    return;
+  if(root->edges[transform(all[stindex][level])] == NULL) {
+    timer += minimize(level - pc, 1 + root->length - level) + len - level;
+    searchWord(root, stindex, (subindex+1), (stlen-1), level + 1, pc, false, len, prio);
   }
-  if(step1 && key.length() > 0) {
-    timer += 1;
-    // cout << "Timer after step1 from completion: " << timer << "\n";
+
+  if((root->edges[transform(all[stindex][level])])->priority != prio) {
+    timer += minimize(level - pc, 1 + root->length - level) + 1;
     pc += 1;
-    string trump = key.substr(1);
-    searchWord(root->edges[child], trump, level+1, pc, ((level==0)?false:((root->edges[child]->priority) != (root->priority))) );
-    return;
+    prio = (root->edges[transform(all[stindex][level])])->priority;
   }
-  string trump = key.substr(1);
-  searchWord(root->edges[child], trump, level+1, pc, ((root->edges[child]->priority) != (root->priority)));
+  searchWord(root->edges[transform(all[stindex][level])], stindex, subindex, (stlen - 1), (level + 1), pc, false, len, prio);
 }
 
 int main() {
+  // ios_base::sync_with_stdio(false);
+  // cin.tie(NULL);
+  // cout.tie(NULL);
+
   LL M=0, N=0, i=0;
-  string temp="";
+
+  for(i = 0; i < 300000; i++) {
+    all[i] = string();
+    fall[i] = string();
+  }
 
   Trie* root = (Trie*)(malloc(sizeof(Trie)));
   init(root, -1, -1); // the root will be -1, -1 priority and length
 
   cin >> M >> N;
   for(i = 0; i < M; i++) {
-    cin >> temp;
-    addWord(root, temp, (M-i), temp.length());
+    cin >> fall[i];
+    LL templen = (LL)(fall[i].length());
+    addWord(root, i, 0, templen, (M-i), templen);
   }
 
   // TRIE TESTS. POSITIVE RESULT.
@@ -153,9 +141,19 @@ int main() {
 
 
   for(i = 0; i < N; i++) {
-    cin >> temp;
+    cin >> all[i];
     timer = 0;
-    searchWord(root, temp, 0, 0, true);
+    LL templen = (LL)(all[i].length());
+
+    if(root->edges[transform(all[i][0])]) {
+      timer = templen;
+    }
+    else {
+      timer = 1;
+      LL pc = 1;
+
+      searchWord(root->edges[transform(all[i][0])], i, 0, templen, 0, 0, true, templen, root->priority);
+    }
     cout << timer << '\n';
     // cout << searchWord() << '\n';
   }
