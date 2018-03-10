@@ -39,21 +39,15 @@ void init(Trie* node, LL prty, LL len) {
 void addWord(Trie* root, string &word, LL prty, LL len) {
   if(word.length() == 0) {
     root->word = true;
-    // cout << "UPDATED WORD\nnode " << root << " : priority = " << root->priority << ". length = " << root->length << ". word = " << root->word << "\n";
     return;
   }
   char fchar = word[0];
   LL child = transform(fchar);
 
-  // cout << "Adding " << fchar << " to " << root << ". edge[" << child << "] = " << root->edges[child] << "\n";
-
   if(root->edges[child] == NULL) { // new branch. Modify priority and length
-    // cout << "New node being created as NULL.\n";
     root->edges[child] = (Trie*)(malloc(sizeof(Trie)));
     init(root->edges[child], prty, len);
-    // cout << "New ";
   }
-  // cout << "node " << root->edges[child] << " : priority = " << root->edges[child]->priority << ". length = " << root->edges[child]->length << ". word = " << root->edges[child]->word << "\n";
   string trump = word.substr(1);
   addWord(root->edges[child], trump, prty, len);
 }
@@ -61,8 +55,6 @@ void addWord(Trie* root, string &word, LL prty, LL len) {
 void searchWord(Trie * root, string &key, LL level, LL pc, bool step1) {
   LL child = 0;
   char fchar = 'a';
-
-  // cout << "key: " << key << ". level: " << level << ". pc: " << pc << ". node:" << root << "\n";
 
   if(key.length() > 0) {
     fchar = key[0];
@@ -72,26 +64,19 @@ void searchWord(Trie * root, string &key, LL level, LL pc, bool step1) {
 
   if(key.length() == 0) { // in case the element is entirely within the system
     timer += minimize(level - pc, 1 + root->length - level);
-    // cout << "Timer after key exhausts: " << timer << "\n";
     return;
   }
-  // cout << "root->word: " << root->word << "\n";
-  if(/*root->word*/(root->edges[child] == NULL) || ((root->edges[child]->priority) != (root->priority))) { // there will be a priority shift
+  if((root->edges[child] == NULL) || ((root->edges[child]->priority) != (root->priority))) { // there will be a priority shift
     timer += minimize(level - pc, 1 + root->length - level);
-    // cout << "Timer after priority shift: " << timer << "\n";
     pc = level;
   }
 
-  // cout << "fchar: " << fchar << ". child: " << child << ". edges[child]: " << root->edges[child] << "\n";
-  // cout << "root priority: " << root->priority << ". child (fchar) priority: " << ((root->edges[child] == NULL)?(-1):(root->edges[child]->priority)) << "\n";
   if(root->edges[child] == NULL) { // if the edge does not exist
     timer += key.length();
-    // cout << "Timer after mismatch: " << timer << "\n";
     return;
   }
   if(step1 && key.length() > 0) {
     timer += 1;
-    // cout << "Timer after step1 from completion: " << timer << "\n";
     pc += 1;
     string trump = key.substr(1);
     searchWord(root->edges[child], trump, level+1, pc, ((level==0)?false:((root->edges[child]->priority) != (root->priority))) );
@@ -113,44 +98,6 @@ int main() {
     cin >> temp;
     addWord(root, temp, (M-i), temp.length());
   }
-
-  // TRIE TESTS. POSITIVE RESULT.
-  // for(i = 0; i < MAX; i++) {
-  //   cout << (root->edges[i]) << '\t';
-  // }
-  // cout << '\n';
-  //
-  // for(i = 0; i < MAX; i++) {
-  //   if(root->edges[i] != NULL) cout << (root->edges[i]->priority) << ' '; else cout << ' ';
-  // }
-  // cout << '\n';
-  //
-  // for(i = 0; i < MAX; i++) {
-  //   if(root->edges[i] != NULL) cout << (root->edges[i]->length) << ' '; else cout << ' ';
-  // }
-  // cout << '\n';
-  //
-  // for(i = 0; i < MAX; i++) {
-  //   if(root->edges[i] != NULL) cout << (root->edges[i]->word) << ' '; else cout << ' ';
-  // }
-  // cout << '\n';
-  //
-  // for(i = 0; i < MAX; i++) {
-  //   cout << (root->edges[0]->edges[i]) << ' ';
-  // }
-  // cout << '\n';
-  //
-  // for(i = 0; i < MAX; i++) {
-  //   if(root->edges[0]->edges[i] != NULL) cout << (root->edges[0]->edges[i]->priority) << ' '; else cout << ' ';
-  // }
-  // cout << '\n';
-  //
-  // for(i = 0; i < MAX; i++) {
-  //   if(root->edges[0]->edges[i] != NULL) cout << (root->edges[0]->edges[i]->length) << ' '; else cout << ' ';
-  // }
-  // cout << '\n';
-
-
 
   for(i = 0; i < N; i++) {
     cin >> temp;
