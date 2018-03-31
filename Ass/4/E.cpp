@@ -12,39 +12,16 @@ bool visited[100007];
 
 ll dfs(ll vertex, ll ctrl) {
   visited[vertex] = true;
+  ll i, sz = adj[vertex].size(), sum = ((ctrl == control[vertex])?1:-1);
 
-  if(control[vertex] == ctrl) {
-    dp[vertex]++;
-  }
-  else if(dp[vertex] != 0) {
-    dp[vertex]--;
-  }
-
-  if(dp[vertex] > maxi)
-    maxi = dp[vertex];
-
-  ll d = dp[vertex], temp;
-
-
-  ll i, sz = adj[vertex].size();
   for(i = 0; i < sz; i++) {
-
-    if(!visited[ adj[vertex][i] ]) {
-      dp[ adj[vertex][i] ] = dp[vertex];
-      temp = dfs(adj[vertex][i], ctrl);
-      if(temp > d) {
-        d = temp;
-        if(dp[vertex] == 0 && d == 1)
-          dp[vertex] = d;
-        else if(dp[vertex] == 0 && ctrl != control[vertex])
-          dp[vertex] = d-1;
-        else
-          dp[vertex] = d;
-      }
-    }
-
+    if(!visited[ adj[vertex][i] ])
+      sum += dfs(adj[vertex][i], ctrl);
   }
-  return dp[vertex];
+  if(sum > maxi)
+    maxi = sum;
+
+  return sum < 0? 0: sum;
 }
 
 int main() {
