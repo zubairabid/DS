@@ -6,42 +6,43 @@ typedef long long ll;
 
 bool stop = false;
 vector<ll> adj[100007];
-vector<ll> ng[100007];
 vector<ll> tspose[100007];
 ll visited[100007];
 ll indegree[100007];
 ll comp[100007];
-vector<ll> ans;
+set<ll> ans;
 set<ll> todo;
+vector<ll> bc;
 
 void dfs(ll v, ll cyc) {
   visited[v] = cyc;
+  ans.insert(v);
   ll i, sz = tspose[v].size();
   for(i = 0; i < sz; i++) {
-    ng[ tspose[v][i] ].push_back(v);
-    indegree[v]++;
     // check for cycles
-    if(visited[ tspose[v][i] ] == cyc) {
+    if(!stop && visited[ tspose[v][i] ] == cyc) {
       cout << "GO HOME RAJAS\n";
       stop = true;
       return;
     }
 
-    if(!stop && visited[ tspose[v][i] ] == 0)
+    if(!stop && visited[ tspose[v][i] ] == 0) {
       dfs(tspose[v][i], cyc);
+    }
   }
   visited[v] = -1;
 }
 
 void topo(ll v) {
-  ll i, sz = ng[v].size();
+  ll i, sz = adj[v].size();
   for(i = 0; i < sz; i++) {
-    indegree[ng[v][i]]--;
-    if(indegree[ng[v][i]] == 0) {
-      todo.insert(ng[v][i]);
+    indegree[adj[v][i]]--;
+    if(indegree[adj[v][i]] == 0) {
+      todo.insert(adj[v][i]);
     }
   }
-  ans.push_back(v);
+  if(ans.find(v) != ans.end())
+    bc.push_back(v);// cout << v << " ";
 }
 
 int main() {
@@ -52,6 +53,7 @@ int main() {
     cin >> u >> v;
     adj[u].push_back(v);
     tspose[v].push_back(u);
+    indegree[v]++;
   }
 
   for(i = 0; i < k; i++) {
@@ -60,31 +62,27 @@ int main() {
 
   for(i = 0; i < k && !stop; i++) {
     if(visited[comp[i]] == 0)
-      dfs(comp[i], temp++);
+      dfs(comp[i], temp);
   }
 
   if(!stop) {
     for(i = 1; i <= n; i++) {
-      if(indegree[ i ] == 0 && visited[ i ] != 0) {
+      if(indegree[ i ] == 0) {
         todo.insert(i);
       }
     }
 
     set<ll>::iterator it = todo.begin();
-
-    while(todo.size() > 0) {
+    cout << ans.size() << "\n";
+    while(!todo.empty()) {
       temp = *it;
       todo.erase(it);
       topo(temp);
       it = todo.begin();
     }
-
-
-    cout << ans.size() << "\n";
-    temp = ans.size();
-    for(i = 0; i < temp; i++) {
-      cout << ans[i] << " ";
-    }
+    ll sz = bc.size();
+    for(i = 0; i < sz; i++)
+      /*if(visited[bc[i]]==-1) */cout << bc[i] << " ";
     cout << "\n";
   }
 
