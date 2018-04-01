@@ -37,8 +37,9 @@ void topo(ll v) {
   ll i, sz = ng[v].size();
   for(i = 0; i < sz; i++) {
     indegree[ng[v][i]]--;
-    if(indegree[ng[v][i]] == 0)
+    if(indegree[ng[v][i]] == 0) {
       todo.insert(ng[v][i]);
+    }
   }
   ans.push_back(v);
 }
@@ -57,13 +58,14 @@ int main() {
     cin >> comp[i];
   }
 
-  for(i = 0; i < k; i++) {
+  for(i = 0; i < k && !stop; i++) {
     if(visited[comp[i]] == 0)
       dfs(comp[i], temp++);
   }
+
   if(!stop) {
     for(i = 1; i <= n; i++) {
-      if(indegree[ i ] == 0 && visited[ i ]) {
+      if(indegree[ i ] == 0 && visited[ i ] != 0) {
         todo.insert(i);
       }
     }
@@ -71,10 +73,13 @@ int main() {
     set<ll>::iterator it = todo.begin();
 
     while(todo.size() > 0) {
-      topo(*it);
+      temp = *it;
       todo.erase(it);
+      topo(temp);
       it = todo.begin();
     }
+
+
     cout << ans.size() << "\n";
     temp = ans.size();
     for(i = 0; i < temp; i++) {
